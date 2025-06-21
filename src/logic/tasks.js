@@ -1,3 +1,9 @@
+// generate a unique ID based on existing tasks
+function generateUniqueId(tasks) {
+  return tasks.length ? Math.max(...tasks.map((task) => task.id)) + 1 : 1;
+}
+
+// create a new task object
 function createTask(id, description) {
   return {
     id,
@@ -6,33 +12,33 @@ function createTask(id, description) {
   };
 }
 
+// add a new task to the list
 function addTask(tasks, description) {
-  const id = generateId(tasks);
-  const newTask = createTask(id, description);
+  const newId = generateUniqueId(tasks);
+  const newTask = createTask(newId, description);
   return [...tasks, newTask];
 }
 
-function removeTask(tasks, id) {
-  return tasks.filter((task) => task.id !== id);
+// remove a task by ID
+function removeTask(tasks, taskId) {
+  return tasks.filter((task) => task.id !== taskId);
 }
 
-function toggleTask(tasks, id) {
+// toggle the completion status of a task
+function toggleTaskCompletion(tasks, taskId) {
   return tasks.map((task) => {
-    if (task.id === id) {
+    if (task.id === taskId) {
       return { ...task, completed: !task.completed };
     }
     return task;
   });
 }
 
-// helper function to generate unique id
-function generateId(tasks) {
-  return tasks.length ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
-}
-
+// Export functions
 module.exports = {
+  generateUniqueId,
   createTask,
   addTask,
   removeTask,
-  toggleTask,
+  toggleTaskCompletion,
 };

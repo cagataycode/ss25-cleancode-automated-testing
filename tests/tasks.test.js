@@ -1,9 +1,9 @@
-import {
+const {
   createTask,
   addTask,
   removeTask,
   toggleTask,
-} from "../src/logic/tasks";
+} = require("../src/logic/tasks");
 
 describe("Task management functions", () => {
   let tasks;

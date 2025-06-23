@@ -2,7 +2,7 @@ const {
   createTask,
   addTask,
   removeTask,
-  toggleTask,
+  toggleTaskCompletion,
 } = require("../src/logic/tasks");
 
 describe("Task management functions", () => {
@@ -36,9 +36,9 @@ describe("Task management functions", () => {
   });
 
   test("toggleTask toggles the completed status of a task", () => {
-    const newTasks = toggleTask(tasks, 1);
+    const newTasks = toggleTaskCompletion(tasks, 1);
     expect(newTasks.find((t) => t.id === 1).completed).toBe(true);
-    const toggledBack = toggleTask(newTasks, 1);
+    const toggledBack = toggleTaskCompletion(newTasks, 1);
     expect(toggledBack.find((t) => t.id === 1).completed).toBe(false);
   });
 });

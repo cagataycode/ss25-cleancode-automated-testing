@@ -1,4 +1,4 @@
-const storage = require("./storage");
+const storage = require("./storage/storage");
 const createTaskManager = require("./taskManager");
 
 const taskManager = createTaskManager(storage);
@@ -21,42 +21,55 @@ Choose an option:
 `);
 }
 
-function prompt() {
+async function prompt() {
   showMenu();
   rl.question("Enter your choice: ", async (choice) => {
-    switch (choice.trim()) {
-      case "1":
+    choice = choice.trim();
+    switch (choice) {
+      case "1": {
         const tasks = await taskManager.getTasks();
         console.log("Tasks:", tasks);
         break;
-      case "2":
+      }
+      case "2": {
         rl.question("Enter task description: ", async (desc) => {
           await taskManager.addNewTask(desc);
           console.log("Task added.");
+          await prompt(); // Call prompt again after completing this action
         });
-        break;
-      case "3":
+        return; // Exit current callback to avoid calling prompt twice
+      }
+      case "3": {
         rl.question("Enter task ID to remove: ", async (id) => {
           await taskManager.removeTaskById(parseInt(id));
           console.log("Task removed.");
+          await prompt();
         });
-        break;
-      case "4":
+        return;
+      }
+      case "4": {
         rl.question("Enter task ID to toggle: ", async (id) => {
           await taskManager.toggleTask(parseInt(id));
           console.log("Task toggled.");
+          await prompt();
         });
-        break;
-      case "5":
+        return;
+      }
+      case "5": {
         rl.close();
         return;
+      }
       default:
         console.log("Invalid choice");
+        await prompt();
+        return;
     }
-    setTimeout(prompt, 500); // small delay to allow async ops
+    // After handling the choice, call prompt again
+    await prompt();
   });
 }
 
+// Start the prompt loop
 prompt();
 
 rl.on("close", () => {
